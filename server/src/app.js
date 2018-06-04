@@ -41,10 +41,45 @@ app.post('/posts', (req, res) => {
 app.get('/posts', (req, res) => {
     Post.find({}, 'title description', function (error, posts) {
         if (error) { console.error(error); }
-        res.send({
+        res.json({
             posts: posts
         });
     }).sort({_id:-1});
+});
+
+app.get('/post/:id', (req, res) => {
+    Post.findById(req.params.id, 'title description', function (error, post) {
+    if (error) { console.error(error); }
+        res.send(post);
+    });
+});
+
+
+app.put('/posts/:id', (req, res) => {
+Post.findById(req.params.id, 'title description', function (error, post) {
+    if (error) { console.error(error); }
+        post.title = req.body.title;
+        post.description = req.body.description;
+        post.save(function (error) {
+            if (error) {
+                console.log(error);
+            }
+            res.json({
+                success: true
+            });
+        });
+    });
+});
+
+app.delete('/posts/:id', (req, res) => {
+    Post.remove({
+        _id: req.params.id
+    }, function(err, post){
+        if (err) res.send(err);
+        res.send({
+            success: true
+        });
+    });
 });
 
 app.listen(port, () => {
