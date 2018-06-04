@@ -1,4 +1,4 @@
-# todolist
+# Blog
 
 > First VueJS project to get used to
 
